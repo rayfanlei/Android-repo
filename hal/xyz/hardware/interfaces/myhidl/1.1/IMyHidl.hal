@@ -1,0 +1,15 @@
+package com.xyz.hardware.myhidl@1.1;
+
+import @1.1::IMyHidlCallback;
+import @1.0::IMyHidl;
+
+interface IMyHidl extends com.xyz.hardware.myhidl@1.0::IMyHidl
+{
+    /*
+    *Extended myhidl api
+    *input para: string argv, json format string
+    *ouput para: retVal, json format string
+    */
+    subscribe_1_1(IMyHidlCallback callback) generates (bool retVal); 
+    functionExt (string argv) generates (string retVal);
+};

@@ -1,0 +1,21 @@
+android_app {
+    name: "myhidlsvc-client-java",
+    manifest: "AndroidManifest.xml",
+    platform_apis: false, //must false if sdk_version is not empty, else must be true
+    sdk_version: "system_current",
+    min_sdk_version: "29",
+    certificate: "platform",
+    privileged: true,
+    system_ext_specific: true,
+
+    srcs: ["src/**/*.java"],
+
+    static_libs: [
+        "androidx.appcompat_appcompat",
+        "vendor.xyz.hardware.myhidlsvc-V1.1-java",
+    ],
+
+    libs: [
+        "app-compat-annotations",
+    ],
+}

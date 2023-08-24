@@ -1,0 +1,12 @@
+cc_library_shared {
+    name: "myhidlsvc.default",
+    relative_install_path: "hw",
+    proprietary: true,
+
+    srcs: ["myhidlsvc.cpp"],
+
+    cflags: ["-Wall", "-Werror"],
+
+    header_libs: ["libhardware_headers"],
+    shared_libs: ["liblog"],
+}

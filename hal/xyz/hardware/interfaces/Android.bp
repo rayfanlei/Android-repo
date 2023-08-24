@@ -1,0 +1,8 @@
+subdirs = [
+    "*"
+]
+
+hidl_package_root {
+    name: "com.xyz.hardware",
+    use_current: true,
+}
