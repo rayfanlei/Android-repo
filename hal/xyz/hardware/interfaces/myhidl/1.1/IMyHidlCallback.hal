@@ -1,0 +1,7 @@
+package com.xyz.hardware.myhidl@1.1;
+
+import @1.0::IMyHidlCallback;
+
+interface IMyHidlCallback extends com.xyz.hardware.myhidl@1.0::IMyHidlCallback {
+    oneway onRequestExt(uint32_t param1, string param3);
+};

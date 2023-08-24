@@ -1,0 +1,25 @@
+cc_binary {
+    name: "myhidlsvc-client-native",
+    vendor: true,
+    srcs: [
+        "myhidlsvc-client-native.cpp",
+        "MyHidlSvcClientCallback.cpp",
+    ],
+
+    shared_libs: [
+        "libc",
+        "libutils",
+        "libcutils",
+        "libbase",
+        "liblog",
+        "libhidlbase",
+        "libhidltransport",
+        "vendor.xyz.hardware.myhidlsvc@1.0",
+        "vendor.xyz.hardware.myhidlsvc@1.1",
+    ],
+
+    cflags: [
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+}

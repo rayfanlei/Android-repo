@@ -1,0 +1,14 @@
+package com.xyz.hardware.myhidl@1.0;
+
+import IMyHidlCallback;  //Call back interface
+
+interface IMyHidl {
+    subscribe_1_0(IMyHidlCallback callback) generates (bool retVal); 
+    setFunc(int32_t val) generates (bool retVal); 
+    getFunc() generates (int32_t retVal); 
+    functionFoo(uint32_t param1, StructFoo  param2) generates (string retVal); 
+    functionBar(uint64_t param1, string param2) generates (uint32_t retVal);
+    functionOrr(RequestCode req) generates (ResponseCode retVal);
+    functionPss(uint32_t param1, vec<uint8_t> param2) generates (uint32_t retVal);
+    functionQtt(vec<uint8_t> val) generates (vec<uint8_t> retVal);
+};

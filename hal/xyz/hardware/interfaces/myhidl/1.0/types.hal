@@ -1,0 +1,22 @@
+package com.xyz.hardware.myhidl@1.0;
+
+enum RequestCode: uint32_t {
+  REQ_UNKNOWN = 1,
+  REQ_OK,
+  REQ_ENOENT,
+  REQ_EINTR,
+  REQ_EIO,
+};
+
+enum ResponseCode: uint32_t {
+  RSP_UNKNOWN = 1,
+  RSP_OK,
+  RSP_ENOENT,
+  RSP_EINTR,
+  RSP_EIO,
+};
+
+struct StructFoo {
+    uint32_t id;
+    string name;
+};

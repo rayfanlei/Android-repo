@@ -1,0 +1,9 @@
+package com.xyz.hardware.myhidl@1.0;
+
+interface IMyHidlCallback {
+    oneway onRequest(uint32_t param1, ResponseCode param2, string param3); //it is a async function, no return value
+    oneway onError(string val);
+    oneway notify(uint32_t param1, string param2, StructFoo param3);
+    getValue(string val) generates (string retVal); //Return string value by 'generates'
+    getValueExtra(uint32_t val) generates (StructFoo retVal); //Return struct 'StructFoo'
+};

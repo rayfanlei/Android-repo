@@ -1,0 +1,29 @@
+cc_binary {
+    name: "com.xyz.hardware.myhidl@1.1-service",
+    defaults: ["hidl_defaults"],
+    init_rc: ["com.xyz.hardware.myhidl@1.1-service.rc"],
+    vintf_fragments: ["manifest.xml"],
+    //vendor: true,
+    proprietary: true,
+    relative_install_path: "hw",
+
+    srcs: [
+        "service.cpp",
+        "MyHidl.cpp",
+    ],
+
+    shared_libs: [
+        "libcutils",
+        "liblog",
+        "libhidlbase",
+        "libhardware",
+        "libutils",
+        "com.xyz.hardware.myhidl@1.1",
+        "com.xyz.hardware.myhidl@1.0",
+    ],
+
+    cflags: [
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+}
