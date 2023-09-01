@@ -11,6 +11,7 @@ namespace com::xyz::hardware::myhidl::implementation {
 MyHidl* MyHidl::sInstance = nullptr;
 sp<V1_0::IMyHidlCallback> MyHidl::mCallback_1_0 = nullptr;
 sp<V1_1::IMyHidlCallback> MyHidl::mCallback_1_1 = nullptr;
+sp<V1_2::IMyHidlCallback> MyHidl::mCallback_1_2 = nullptr;
 
 myhidl_callbacks_t MyHidl::sHalCallbacks = {
     .on_request = onRequest,
@@ -19,6 +20,7 @@ myhidl_callbacks_t MyHidl::sHalCallbacks = {
     .get_value = getValue,
     .get_value_extra = getValueExtra,
     .on_request_ext = onRequestExt,
+    .output_data = outputData,
 };
 
 MyHidl::MyHidl() : mDevice(nullptr) {
@@ -80,7 +82,7 @@ myhidl_device_t* MyHidl::openHal() {
     return myhidl_device;
 }
 
-V1_1::IMyHidl* MyHidl::getInstance(void) {
+V1_2::IMyHidl* MyHidl::getInstance(void) {
     if (!sInstance) {
         sInstance = new MyHidl();
     }
@@ -122,10 +124,28 @@ Return<bool> MyHidl::subscribe_1_1(const sp<V1_1::IMyHidlCallback>& callback) {
     return bool {true};
 }
 
+Return<bool> MyHidl::subscribe_1_2(const sp<V1_2::IMyHidlCallback>& callback) {
+    std::lock_guard<std::mutex> lock(mCallbackMutex_1_2);
+    if (callback == nullptr) {
+        ALOGE("callback is null pointer!");
+        return bool{false};
+    }
+
+    if (nullptr != mCallback_1_2) {
+        ALOGW("%s called more than once", __func__);
+        mCallback_1_2->unlinkToDeath(mDeathRecipient_1_2);
+    }
+
+    mCallback_1_2 = callback;
+    callback->linkToDeath(mDeathRecipient_1_2, 0/*cookie*/);
+    return bool {true};
+}
+
 void MyHidl::handleHidlDeath() {
     ALOGW("service noticed HIDL death.");
     mCallback_1_0 = nullptr;
     mCallback_1_1 = nullptr;
+    mCallback_1_2 = nullptr;
 }
 
 Return<bool> MyHidl::setFunc(int32_t val) {
@@ -259,6 +279,45 @@ void MyHidl::onRequestExt(uint32_t param1, string param2) {
     }
 
     auto ret = mCallback_1_1->onRequestExt(param1, param2);
+    if (!ret.isOk()) {
+        ALOGE("%s: Unable to invoke callback", __func__);
+    }
+}
+
+Return<bool> MyHidl::inputData(const hidl_vec<uint8_t>& val) {
+    size_t size_val = val.size();
+    if (size_val <= 0) {
+        ALOGE("%s Invalid size %zu", __func__, size_val);
+        return {false};
+    }
+
+    uint8_t *p_val = new uint8_t[size_val];
+    if (nullptr == p_val) {
+        ALOGE("%s Insufficient memory!", __func__);
+        return {false};
+    }
+
+    copy(val.begin(), val.end(), p_val);
+    bool ret = mDevice->inputData(mDevice, p_val, size_val);
+    delete []p_val;
+    return ret;
+}
+
+void MyHidl::outputData(uint8_t* const message, uint32_t const length) {
+    if (nullptr == mCallback_1_2) {
+        ALOGE("%s: Callback Interface configured incorrectly", __func__);
+        return;
+    }
+    if (nullptr == message || length == 0) {
+        ALOGE("%s: Invalid input parameters. message:[%p], length:[%d]",
+                __func__, message, length);
+        return;
+    }
+
+    std::vector<uint8_t> msg_vec;
+    msg_vec.resize(length);
+    msg_vec.assign(message, message + length);
+    auto ret = mCallback_1_2->outputData((hidl_vec<uint8_t>)msg_vec);
     if (!ret.isOk()) {
         ALOGE("%s: Unable to invoke callback", __func__);
     }

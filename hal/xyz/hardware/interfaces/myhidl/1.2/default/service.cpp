@@ -1,13 +1,13 @@
 #include <log/log.h>
 #include <android/log.h>
 #include <hidl/LegacySupport.h>
-#include <com/xyz/hardware/myhidl/1.1/IMyHidl.h>
+#include <com/xyz/hardware/myhidl/1.2/IMyHidl.h>
 #include "MyHidl.h"
  
 #undef LOG_TAG
-#define LOG_TAG "com.xyz.hardware.myhidl@1.1-service"
+#define LOG_TAG "com.xyz.hardware.myhidl@1.2-service"
 
-using com::xyz::hardware::myhidl::V1_1::IMyHidl;
+using com::xyz::hardware::myhidl::V1_2::IMyHidl;
 using com::xyz::hardware::myhidl::implementation::MyHidl;
 using android::hardware::configureRpcThreadpool;
 using android::hardware::joinRpcThreadpool;

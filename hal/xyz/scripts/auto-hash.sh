@@ -16,3 +16,10 @@ SS=com.xyz.hardware:vendor/xyz/hardware/interfaces
 TT=android.hidl:system/libhidl/transport
 
 hidl-gen -L hash -r$SS -r$TT $PACKAGE
+
+LOC=$ANDROID_BUILD_TOP/vendor/xyz/hardware/interfaces/myhidl/1.2/default
+PACKAGE=com.xyz.hardware.myhidl@1.2
+SS=com.xyz.hardware:vendor/xyz/hardware/interfaces
+TT=android.hidl:system/libhidl/transport
+
+hidl-gen -L hash -r$SS -r$TT $PACKAGE

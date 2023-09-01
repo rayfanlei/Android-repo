@@ -1,11 +1,14 @@
 cc_library_shared {
-    name: "myhidlsvc.default",
+    name: "myhidl.default",
     relative_install_path: "hw",
     proprietary: true,
 
-    srcs: ["myhidlsvc.cpp"],
+    srcs: ["myhidl_impl.cpp"],
 
-    cflags: ["-Wall", "-Werror"],
+    cflags: [
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
 
     header_libs: ["libhardware_headers"],
     shared_libs: ["liblog"],

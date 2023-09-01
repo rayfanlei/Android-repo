@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define MYHIDL_MODULE_API_VERSION_1_1 HARDWARE_MODULE_API_VERSION(1, 1)
+#define MYHIDL_MODULE_API_VERSION_1_2 HARDWARE_MODULE_API_VERSION(1, 2)
 #define MYHIDL_HARDWARE_MODULE_ID "myhidl"
 
 enum RequestCode: uint32_t {
@@ -35,6 +35,7 @@ typedef void (*ptr_notify)(uint32_t param1, const char* param2, const StructFoo 
 typedef string (*ptr_get_value)(string val);
 typedef StructFoo (*ptr_get_value_extra)(uint32_t val);
 typedef void (*ptr_on_request_ext)(uint32_t param1, string param2);
+typedef void (*ptr_output_data)(uint8_t* const message, uint32_t const length);
 
 typedef struct MyHidl_Callbacks {
     ptr_on_request on_request;
@@ -43,6 +44,7 @@ typedef struct MyHidl_Callbacks {
     ptr_get_value get_value;
     ptr_get_value_extra get_value_extra;
     ptr_on_request_ext on_request_ext;
+    ptr_output_data output_data;
 } myhidl_callbacks_t;
 
 typedef struct myhidl_device {
@@ -57,6 +59,7 @@ typedef struct myhidl_device {
     uint32_t (*functionPss)(struct myhidl_device *dev, uint32_t param1);
     uint8_t* (*functionQtt)(struct myhidl_device *dev);
     char* (*functionExt)(struct myhidl_device *dev);
+    bool (*inputData)(struct myhidl_device* dev, uint8_t* value, uint32_t size);
 
 } myhidl_device_t;
 

@@ -1,0 +1,12 @@
+package com.xyz.hardware.myhidl@1.2;
+
+import @1.1::IMyHidlCallback;
+import @1.2::IMyHidlCallback;
+import @1.0::IMyHidl;
+import @1.1::IMyHidl;
+
+interface IMyHidl extends com.xyz.hardware.myhidl@1.1::IMyHidl
+{
+    subscribe_1_2(IMyHidlCallback callback) generates (bool retVal); 
+    inputData(vec<uint8_t> val) generates (bool retVal);
+};

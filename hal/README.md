@@ -27,24 +27,18 @@ Append to hwservice_contexts
     com.xyz.hardware.myhidl::IMyHidl    u:object_r:hal_myhidl_hwservice:s0
 Append to file_contexts
     /(vendor|system/vendor)/bin/hw/com.xyz.hardware.myhidl@1.1-service    u:object_r:hal_myhidl_exec:s0
-Append to attributes
-    # hal myhidl
-    attribute hal_myhidl;
-    attribute hal_myhidl_client;
-    attribute hal_myhidl_server;
 Create hal_myhidl.te
-    # HwBinder IPC from client to server, and callbacks
-    binder_call(hal_myhidl_client, hal_myhidl_server);
-    binder_call(hal_myhidl_server, hal_myhidl_client);
+    type hal_myhidl_exec, exec_type, vendor_file_type, file_type;
+    type hal_myhidl_hwservice,  hwservice_manager_type;
+    type hal_myhidl, domain;
+    net_domain(hal_myhidl)
+    domain_auto_trans(shell, hal_myhidl_exec, hal_myhidl)
+    init_daemon_domain(hal_myhidl)
+    hwbinder_use(hal_myhidl)
 
-    add_hwservice(hal_myhidl_server, hal_myhidl_hwservice);
-    allow hal_myhidl_client hal_myhidl_hwservice:hwservice_manager find;
-    allow shell vendor_file:file { getattr };
-    allow shell hal_myhidl_hwservice:hwservice { find };
-Create hal_myhidl_default.te
-    type hal_myhidl_default, domain,coredomain;
-    hal_server_domain(hal_myhidl_default, hal_myhidl)
-
-    type hal_myhidl_default_exec, exec_type, file_type;
-    init_daemon_domain(hal_myhidl_default)
+    #allow hal_myhidl self:capability { setuid setgid net_raw chown fsetid net_admin sys_module fsetid sys_nice };
+    get_prop(hal_myhidl, hwservicemanager_prop)
+    add_hwservice(hal_myhidl, hal_myhidl_hwservice)
+    allow shell hal_myhidl_hwservice:hwservice_manager find;
+    binder_call(hal_myhidl, system_app)
 

@@ -1,0 +1,8 @@
+package com.xyz.hardware.myhidl@1.2;
+
+import @1.0::IMyHidlCallback;
+import @1.1::IMyHidlCallback;
+
+interface IMyHidlCallback extends com.xyz.hardware.myhidl@1.1::IMyHidlCallback {
+    oneway outputData(vec<uint8_t> val);
+};

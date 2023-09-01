@@ -1,0 +1,4 @@
+service myhidlsvc /vendor/bin/hw/com.xyz.hardware.myhidl@1.2-service
+    class hal
+    user system
+    group system

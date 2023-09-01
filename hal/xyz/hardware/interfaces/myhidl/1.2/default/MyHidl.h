@@ -4,7 +4,7 @@
 
 #include <android/log.h>
 #include <com/xyz/hardware/myhidl/1.0/types.h>
-#include <com/xyz/hardware/myhidl/1.1/IMyHidl.h>
+#include <com/xyz/hardware/myhidl/1.2/IMyHidl.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <../../../../libhardware/include/hardware/myhidl.h>
@@ -21,16 +21,17 @@ using ::android::hardware::Void;
 using ::android::sp;
 using ::android::wp;
 
-struct MyHidl : public V1_1::IMyHidl {
+struct MyHidl : public V1_2::IMyHidl {
     public:
         MyHidl();
         ~MyHidl();
 
-        static V1_1::IMyHidl* getInstance(void);
+        static V1_2::IMyHidl* getInstance(void);
 
         // Methods from ::com::xyz::hardware::myhidl::V1_0::IMyHidl follow.
         Return<bool> subscribe_1_0(const sp<V1_0::IMyHidlCallback>& callback) override;
         Return<bool> subscribe_1_1(const sp<V1_1::IMyHidlCallback>& callback) override;
+        Return<bool> subscribe_1_2(const sp<V1_2::IMyHidlCallback>& callback) override;
         Return<bool> setFunc(int32_t val) override;
         Return<int32_t> getFunc() override;
         Return<void> functionFoo(uint32_t param1, const V1_0::StructFoo& param2, functionFoo_cb _hidl_cb) override;
@@ -42,6 +43,9 @@ struct MyHidl : public V1_1::IMyHidl {
         // Methods from ::com::xyz::hardware::myhidl::V1_1::IMyHidl follow.
         Return<void> functionExt(const hidl_string& argv, functionExt_cb _hidl_cb) override;
 
+        // Methods from ::com::xyz::hardware::myhidl::V1_2::IMyHidl follow.
+        Return<bool> inputData(const hidl_vec<uint8_t>& val) override;
+
         // Methods from ::android::hidl::base::V1_0::IBase follow.
 
     private:
@@ -52,10 +56,12 @@ struct MyHidl : public V1_1::IMyHidl {
         static string getValue(string val);
         static StructFoo getValueExtra(uint32_t val);
         static void onRequestExt(uint32_t param1, string param2);
+        static void outputData(uint8_t* const message, uint32_t const length);
 
         static myhidl_callbacks_t sHalCallbacks;
         static sp<V1_0::IMyHidlCallback> mCallback_1_0;
         static sp<V1_1::IMyHidlCallback> mCallback_1_1;
+        static sp<V1_2::IMyHidlCallback> mCallback_1_2;
 
         class MyHidlDeathRecipient : public hidl_death_recipient {
             public:
@@ -75,8 +81,10 @@ struct MyHidl : public V1_1::IMyHidl {
         static MyHidl* sInstance;
         sp<MyHidlDeathRecipient> mDeathRecipient_1_0;
         sp<MyHidlDeathRecipient> mDeathRecipient_1_1;
+        sp<MyHidlDeathRecipient> mDeathRecipient_1_2;
         std::mutex mCallbackMutex_1_0;
         std::mutex mCallbackMutex_1_1;
+        std::mutex mCallbackMutex_1_2;
         myhidl_device_t* mDevice;
 };
 

@@ -1,7 +1,7 @@
 cc_binary {
-    name: "com.xyz.hardware.myhidl@1.1-service",
+    name: "com.xyz.hardware.myhidl@1.2-service",
     defaults: ["hidl_defaults"],
-    init_rc: ["com.xyz.hardware.myhidl@1.1-service.rc"],
+    init_rc: ["com.xyz.hardware.myhidl@1.2-service.rc"],
     vintf_fragments: ["manifest.xml"],
     //vendor: true,
     proprietary: true,
@@ -18,6 +18,7 @@ cc_binary {
         "libhidlbase",
         "libhardware",
         "libutils",
+        "com.xyz.hardware.myhidl@1.2",
         "com.xyz.hardware.myhidl@1.1",
         "com.xyz.hardware.myhidl@1.0",
     ],

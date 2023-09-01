@@ -1,7 +1,7 @@
 <compatibility-matrix version="1.0" type="framework">
     <hal format="hidl" optional="true">
         <name>com.xyz.hardware.myhidl</name>
-        <version>1.1</version>
+        <version>1.2</version>
         <interface>
             <name>IMyHidl</name>
             <instance>default</instance>
